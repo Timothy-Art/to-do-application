@@ -27,7 +27,7 @@ server.on('connection', (client) => {
 
         // Send the latest todos to the client
         // FIXME: This sends all todos every time, could this be more efficient?
-        reloadTodos();
+        server.emit('load', [DB[DB.length - 1]]);
     });
 
     // Send the DB downstream on connect
