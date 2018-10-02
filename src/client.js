@@ -6,10 +6,10 @@ export const server = io('http://localhost:3003/');
 // This function adds a new todo from the input
 export const add = value => server.emit('make', {title : value});
 
-export const complete = id => server.emit('complete', id);
+export const complete = title => server.emit('complete', title);
 
 export const completeAll = () => server.emit('complete_all');
 
-export const remove = id => server.emit('delete', id);
+export const remove = title => server.emit('delete', title);
 
 export const removeAll = () => server.emit('delete_all');

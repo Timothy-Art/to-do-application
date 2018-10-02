@@ -1,26 +1,32 @@
 import React, { Component } from 'react';
-import { add, complete, remove, removeAll, completeAll } from '../client';
+import DBContext from '../contexts/db-context';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as far from '@fortawesome/free-regular-svg-icons';
 import * as fas from '@fortawesome/free-solid-svg-icons';
 import './todo-list.css';
 
-
-const TodoList = ({ db }) => {
+// Component composing the TodoList inputs and display.
+// Component accesses the db context.
+const TodoList = () => {
     return(
-        <div>
-            <MakeInput />
-            <ListDisplay todos={db}/>
-        </div>
+        <DBContext.Consumer>
+            {({ db }) => (
+                <div>
+                    <MakeInput />
+                    <ListDisplay todos={Object.keys(db).map(key => db[key])}/>
+                </div>
+            )}
+        </DBContext.Consumer>
     )
 };
 
+// Component with the TodoList inputs
+// Component requires the make, removeAll, and completeAll context functions.
 class MakeInput extends Component{
     constructor(props){
         super(props);
         this.state = {value: ''};
 
-        this.handleMake = this.handleMake.bind(this);
         this.handleChange = this.handleChange.bind(this);
     }
 
@@ -28,16 +34,12 @@ class MakeInput extends Component{
         this.setState({value: event.target.value});
     }
 
-    handleMake(){
-        add(this.state.value);
-        this.setState({value: ''});
-        this.textInput.focus()
-    }
-
     render(){
         return(
-            <div>
-                <div className='field'>
+            <DBContext.Consumer>
+                {({make, removeAll, completeAll}) => (
+                    <div>
+                    <div className='field'>
                     <input
                         type="text"
                         className="input"
@@ -48,92 +50,88 @@ class MakeInput extends Component{
                         ref={input => this.textInput = input}
                         autoFocus
                     />
-                </div>
-                <div className='field is-grouped'>
-                    <div className='control'>
-                        <button className='button is-info' onClick={this.handleMake}>
-                            <span className='icon is-small'>
-                                <FontAwesomeIcon icon={fas.faPlusCircle} />
-                            </span>
-                            <span>Add</span>
-                        </button>
                     </div>
-                    <div className='control'>
-                        <button className='button is-danger' onClick={removeAll}>
-                            <span className='icon is-small'>
-                                <FontAwesomeIcon icon={fas.faSadCry} />
-                            </span>
-                            <span>
-                                Delete All
-                            </span>
-                        </button>
+                    <div className='columns is-multiline is-mobile'>
+                        <div className='column is-narrow'>
+                            <button className='button is-info' onClick={() => {
+                                make(this.state.value);
+                                this.setState({value: ''});
+                                this.textInput.focus()
+                            }}>
+                                <span className='icon is-small'>
+                                    <FontAwesomeIcon icon={fas.faPlusCircle} />
+                                </span>
+                                <span>Add</span>
+                            </button>
+                        </div>
+                        <div className='column is-narrow'>
+                            <button className='button is-danger' onClick={removeAll}>
+                                <span className='icon is-small'>
+                                    <FontAwesomeIcon icon={fas.faSadCry} />
+                                </span>
+                                <span>
+                                    Delete All
+                                </span>
+                            </button>
+                        </div>
+                        <div className='column is-narrow'>
+                            <button className='button is-warning' onClick={completeAll}>
+                                <span className='icon is-small'>
+                                    <FontAwesomeIcon icon={fas.faGrinSquint} />
+                                </span>
+                                <span>
+                                    Complete All
+                                </span>
+                            </button>
+                        </div>
                     </div>
-                    <div className='control'>
-                        <button className='button is-warning' onClick={completeAll}>
-                            <span className='icon is-small'>
-                                <FontAwesomeIcon icon={fas.faGrinSquint} />
-                            </span>
-                            <span>
-                                Complete All
-                            </span>
-                        </button>
+                    <br/>
                     </div>
-                </div>
-                <br/>
-            </div>
+                )}
+            </DBContext.Consumer>
         )
     }
 }
 
+// Component that displays each list item.
 const ListDisplay = ({ todos }) => {
     return(
         <div>
             <hr className='list-rule'/>
-            {todos.map(todo => <ListItem key={todo.id} id={todo.id} title={todo.title} completed={todo.completed} />)}
+            {todos.map(todo => <ListItem key={todo.title} title={todo.title} completed={todo.completed} />)}
         </div>
     );
 };
 
-class ListItem extends Component{
-    constructor(props){
-        super(props);
-
-        this.handleComplete = this.handleComplete.bind(this);
-        this.handleDelete = this.handleDelete.bind(this);
-    };
-
-    handleComplete(){
-        complete(this.props.id);
-    };
-
-    handleDelete(){
-        remove(this.props.id);
-    };
-
-    render() {
-        return (
-            <div>
-                <div className='field is-grouped todo-item'>
+// Component of an individual list item with controls.
+// Component requires the complete and remove context functions.
+const ListItem = ({ title, completed }) => {
+    return (
+        <DBContext.Consumer>
+            {({complete, remove}) => (
+              <div>
+                  <div className='field is-grouped todo-item'>
                     <p className='control'>
-                        <button className='button is-text has-text-danger' onClick={this.handleDelete}>
+                        <button className='button is-text has-text-danger' onClick={() => remove(title)}>
                             <FontAwesomeIcon icon={far.faTrashAlt}/>
                         </button>
                     </p>
                     <p className='control'>
-                        <button className={this.props.completed ? 'button is-text has-text-info' : 'button is-text'} onClick={this.handleComplete}>
+                        <button className={completed ? 'button is-text has-text-info' : 'button is-text'} onClick={() => complete(title)}>
                             <FontAwesomeIcon
-                                icon={this.props.completed ? far.faCheckCircle : far.faCircle}
+                                icon={completed ? far.faCheckCircle : far.faCircle}
                             />
                         </button>
                     </p>
                     <p>
-                        {this.props.title}
+                        { title }
                     </p>
                 </div>
                 <hr className='list-rule'/>
-            </div>
-        )
-    };
-}
+              </div>
+            )}
+        </DBContext.Consumer>
+    )
+};
 
 export default TodoList;
