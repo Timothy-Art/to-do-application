@@ -1,10 +1,11 @@
+import io from 'socket.io';
+
 const server = io('http://localhost:3003/');
 const list = document.getElementById('todo-list');
 
 // NOTE: These are all our globally scoped functions for interacting with the server
 // This function adds a new todo from the input
 function add() {
-    console.warn(event);
     const input = document.getElementById('todo-input');
 
     // Emit the new todo as some data to the server
@@ -15,7 +16,6 @@ function add() {
     // Clear the input
     input.value = '';
     input.focus()
-    // TODO: refocus the element
 }
 
 function render(todo) {
