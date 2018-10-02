@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 import { add, complete, remove, removeAll, completeAll } from '../client';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import * as far from '@fortawesome/free-regular-svg-icons';
+import * as fas from '@fortawesome/free-solid-svg-icons';
+import './todo-list.css';
 
 
 const TodoList = ({ db }) => {
@@ -33,18 +37,49 @@ class MakeInput extends Component{
     render(){
         return(
             <div>
-                <input
-                    type="text"
-                    placeholder="Feed the cat"
-                    value={this.state.value}
-                    onChange={this.handleChange}
-                    // Set to this.textInput so we can refer to it programmatically.
-                    ref={input => this.textInput = input}
-                    autoFocus
-                />
-                <button type="button" onClick={this.handleMake}>Add</button>
-                <button type="button" onClick={removeAll}>Delete All</button>
-                <button type="button" onClick={completeAll}>Complete All</button>
+                <div className='field'>
+                    <input
+                        type="text"
+                        className="input"
+                        placeholder="Feed the cat"
+                        value={this.state.value}
+                        onChange={this.handleChange}
+                        // Set to this.textInput so we can refer to it programmatically.
+                        ref={input => this.textInput = input}
+                        autoFocus
+                    />
+                </div>
+                <div className='field is-grouped'>
+                    <div className='control'>
+                        <button className='button is-primary' onClick={this.handleMake}>
+                            <span className='icon is-small'>
+                                <FontAwesomeIcon icon={fas.faPlusCircle} />
+                            </span>
+                            <span>Add</span>
+                        </button>
+                    </div>
+                    <div className='control'>
+                        <button className='button is-danger' onClick={removeAll}>
+                            <span className='icon is-small'>
+                                <FontAwesomeIcon icon={fas.faSadCry} />
+                            </span>
+                            <span>
+                                Delete All
+                            </span>
+                        </button>
+                    </div>
+                    <div className='control'>
+                        <button className='button is-warning' onClick={completeAll}>
+                            <span className='icon is-small'>
+                                <FontAwesomeIcon icon={fas.faGrinSquint} />
+                            </span>
+                            <span>
+                                Complete All
+                            </span>
+                        </button>
+                    </div>
+                </div>
+                <br/>
             </div>
         )
     }
@@ -53,6 +88,7 @@ class MakeInput extends Component{
 const ListDisplay = ({ todos }) => {
     return(
         <div>
+            <hr className='list-rule'/>
             {todos.map(todo => <ListItem key={todo.id} id={todo.id} title={todo.title} completed={todo.completed} />)}
         </div>
     );
@@ -76,10 +112,25 @@ class ListItem extends Component{
 
     render() {
         return (
-            <div className={this.props.completed ? 'complete' : 'incomplete'}>
-                <button type="button" onClick={this.handleDelete}>X</button>
-                <button type="button" onClick={this.handleComplete}>{this.props.completed ? 'Cancel' : 'Complete'}</button>
-                {this.props.title}
+            <div>
+                <div className='field is-grouped todo-item'>
+                    <p className='control'>
+                        <button className='button is-text has-text-danger' onClick={this.handleDelete}>
+                            <FontAwesomeIcon icon={far.faTrashAlt}/>
+                        </button>
+                    </p>
+                    <p className='control'>
+                        <button className={this.props.completed ? 'button is-text has-text-primary' : 'button is-text'} onClick={this.handleComplete}>
+                            <FontAwesomeIcon
+                                icon={this.props.completed ? far.faCheckCircle : far.faCircle}
+                            />
+                        </button>
+                    </p>
+                    <p>
+                        {this.props.title}
+                    </p>
+                </div>
+                <hr className='list-rule'/>
             </div>
         )
     };

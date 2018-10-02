@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import TodoList from './todo-list';
 import {server} from '../client';
+import 'bulma/css/bulma.min.css';
 
 class App extends Component {
     constructor(props){
@@ -48,10 +49,15 @@ class App extends Component {
     render(){
         let todos = Object.keys(this.state.db).map(key => this.state.db[key]);
         return (
-            <div className='App'>
-                <h3>TODO List</h3>
-                <TodoList db={todos} />
-            </div>
+            <section className='App section'>
+                <div className='container'>
+                    <h3 className='title'>What are we doing today?</h3>
+                    <hr/>
+                    <div className='content is-medium'>
+                        <TodoList db={todos} />
+                    </div>
+                </div>
+            </section>
         )
     }
 }

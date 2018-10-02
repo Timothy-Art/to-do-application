@@ -1,0 +1,8 @@
+.list-rule{
+    padding: 0;
+    margin: 5px 0;
+}
+
+.todo-item{
+    margin-bottom: 0 !important;
+}
