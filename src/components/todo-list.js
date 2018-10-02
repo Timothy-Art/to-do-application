@@ -51,7 +51,7 @@ class MakeInput extends Component{
                 </div>
                 <div className='field is-grouped'>
                     <div className='control'>
-                        <button className='button is-primary' onClick={this.handleMake}>
+                        <button className='button is-info' onClick={this.handleMake}>
                             <span className='icon is-small'>
                                 <FontAwesomeIcon icon={fas.faPlusCircle} />
                             </span>
@@ -120,7 +120,7 @@ class ListItem extends Component{
                         </button>
                     </p>
                     <p className='control'>
-                        <button className={this.props.completed ? 'button is-text has-text-primary' : 'button is-text'} onClick={this.handleComplete}>
+                        <button className={this.props.completed ? 'button is-text has-text-info' : 'button is-text'} onClick={this.handleComplete}>
                             <FontAwesomeIcon
                                 icon={this.props.completed ? far.faCheckCircle : far.faCircle}
                             />
