@@ -29,11 +29,11 @@ server.on('connection', (client) => {
     // Accepts when a client makes a new todo
     client.on('make', (t) => {
         // Make a new todo
-        let newTodo = new Todo(index++, t.title);
+        let newTodo = new Todo(index, t.title);
 
         // Push this newly created todo to our database
         DB[index] = newTodo;
-        console.log(DB);
+        index++;
 
         // Send the new todo to our clients
         updateTodo(newTodo.id);
@@ -41,7 +41,7 @@ server.on('connection', (client) => {
 
     client.on('complete', (id) => {
         // Toggle our complete field when the message is sent.
-        DB[id].complete = DB[id].complete && false;
+        DB[id].completed = !DB[id].completed;
 
         // Send an update with the completed todo item.
         updateTodo(id);
@@ -49,7 +49,9 @@ server.on('connection', (client) => {
 
     client.on('delete', (id) => {
         // Delete our desired element from the database.
-        delete DB[id];
+        if (id in DB){
+            delete DB[id];
+        }
 
         // Send a delete command to our clients.
         deleteTodo(id);

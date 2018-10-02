@@ -4,4 +4,4 @@ module.exports = class Todo {
         this.title = title;
         this.completed = completed;
     }
-}
+};
