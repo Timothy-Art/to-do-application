@@ -40,11 +40,19 @@ server.on('connection', (client) => {
     });
 
     client.on('complete', (id) => {
-        // Toggle our complete field when the message is sent.
+        // Toggle our completed field when the message is sent.
         DB[id].completed = !DB[id].completed;
 
         // Send an update with the completed todo item.
         updateTodo(id);
+    });
+
+    client.on('complete_all', () => {
+        // Toggle all completed fields.
+        Object.keys(DB).map(key => DB[key].completed = true);
+
+        // Reload the todos.
+        reloadTodos();
     });
 
     client.on('delete', (id) => {
@@ -58,7 +66,10 @@ server.on('connection', (client) => {
     });
 
     client.on('delete_all', () => {
+        // Clear our database.
         DB = {};
+
+        // Reload the todos.
         reloadTodos()
     });
 

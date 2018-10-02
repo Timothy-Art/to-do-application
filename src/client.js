@@ -8,8 +8,8 @@ export const add = value => server.emit('make', {title : value});
 
 export const complete = id => server.emit('complete', id);
 
+export const completeAll = () => server.emit('complete_all');
+
 export const remove = id => server.emit('delete', id);
 
 export const removeAll = () => server.emit('delete_all');
-
-

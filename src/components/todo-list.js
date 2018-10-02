@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { add, complete, remove, removeAll } from '../client';
+import { add, complete, remove, removeAll, completeAll } from '../client';
 
 
 const TodoList = ({ db }) => {
@@ -44,6 +44,7 @@ class MakeInput extends Component{
                 />
                 <button type="button" onClick={this.handleMake}>Add</button>
                 <button type="button" onClick={removeAll}>Delete All</button>
+                <button type="button" onClick={completeAll}>Complete All</button>
             </div>
         )
     }
