@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import TodoList from './todo-list';
-import DBContext from '../contexts/db-context'
+import DBContext from '../contexts/db-context';
 import { server, add, complete, completeAll, remove, removeAll } from '../client';
-import {get_db_cache, push_db_cache, process_db_updates, push_db_update} from '../cache'
+import {get_db_cache, push_db_cache, process_db_updates, push_db_update} from '../cache';
 import 'bulma/css/bulma.min.css';
 
 class App extends Component {
@@ -44,11 +44,14 @@ class App extends Component {
 
         // Adds a new entry, caches it if the server is unavailable.
         this.make = todo => {
-            if (server.connected){
-                add(todo);
-            } else {
-                this.update({title: todo, completed: false});
-                push_db_update('make', todo);
+            todo = todo.trim();
+            if (todo !== ''){
+                if (server.connected){
+                    add(todo);
+                } else {
+                    this.update({title: todo, completed: false});
+                    push_db_update('make', todo);
+                }
             }
         };
 
@@ -58,7 +61,7 @@ class App extends Component {
                 complete({title: title, completed: !this.state.db[title].completed});
             } else {
                 if (title in this.state.db){
-                    let todo = {title: this.state.db[title].title, completed: !this.state.db[title].completed}
+                    let todo = {title: this.state.db[title].title, completed: !this.state.db[title].completed};
                     this.update(todo);
                     console.log(todo);
                     push_db_update('complete', todo);
