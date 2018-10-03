@@ -55,11 +55,13 @@ class App extends Component {
         // Toggles complete on an entry, caches it if the server is unavailable.
         this.complete = title => {
             if (server.connected){
-                complete(title)
+                complete({title: title, completed: !this.state.db[title].completed});
             } else {
                 if (title in this.state.db){
-                    this.update({title: this.state.db[title].title, completed: !this.state.db[title].completed});
-                    push_db_update('complete', title);
+                    let todo = {title: this.state.db[title].title, completed: !this.state.db[title].completed}
+                    this.update(todo);
+                    console.log(todo);
+                    push_db_update('complete', todo);
                 }
             }
         };
