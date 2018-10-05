@@ -109,25 +109,30 @@ const ListItem = ({ title, completed }) => {
     return (
         <DBContext.Consumer>
             {({complete, remove}) => (
-              <div>
-                  <div className='field is-grouped todo-item'>
-                    <p className='control'>
-                        <button className='button is-text has-text-danger' onClick={() => remove(title)}>
-                            <FontAwesomeIcon icon={far.faTrashAlt}/>
-                        </button>
-                    </p>
-                    <p className='control'>
-                        <button className={completed ? 'button is-text has-text-info' : 'button is-text'} onClick={() => complete(title)}>
-                            <FontAwesomeIcon
-                                icon={completed ? far.faCheckCircle : far.faCircle}
-                            />
-                        </button>
-                    </p>
-                    <p>
-                        { title }
-                    </p>
-                </div>
-                <hr className='list-rule'/>
+                <div>
+                    <div className='field is-grouped todo-item'>
+                        <p className='control'>
+                            <button className='button is-text has-text-grey-dark' onClick={() => remove(title)}>
+                                <FontAwesomeIcon icon={fas.faArrowsAltV}/>
+                            </button>
+                        </p>
+                        <p className='control'>
+                            <button className='button is-text has-text-danger' onClick={() => remove(title)}>
+                                <FontAwesomeIcon icon={far.faTrashAlt}/>
+                            </button>
+                        </p>
+                        <p className='control'>
+                            <button className={completed ? 'button is-text has-text-info' : 'button is-text'} onClick={() => complete(title)}>
+                                <FontAwesomeIcon
+                                    icon={completed ? far.faCheckCircle : far.faCircle}
+                                />
+                            </button>
+                        </p>
+                        <p>
+                            { title }
+                        </p>
+                    </div>
+                    <hr className='list-rule'/>
               </div>
             )}
         </DBContext.Consumer>

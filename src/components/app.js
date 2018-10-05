@@ -3,6 +3,9 @@ import TodoList from './todo-list';
 import DBContext from '../contexts/db-context'
 import { server, add, complete, completeAll, remove, removeAll } from '../client';
 import {get_db_cache, push_db_cache, process_db_updates, push_db_update} from '../cache'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import * as far from '@fortawesome/free-regular-svg-icons';
+import * as fas from '@fortawesome/free-solid-svg-icons';
 import 'bulma/css/bulma.min.css';
 
 class App extends Component {
@@ -134,6 +137,23 @@ class App extends Component {
         return (
             <DBContext.Provider value={this.state}>
                 <section className='App section'>
+                    <div className="media">
+                        <div className="media-content">
+                        </div>
+                        <figure className="media-right">
+                            <span className="fa-layers fa-fw">
+                              <FontAwesomeIcon icon={fas.faCircle} size="2x" color="deeppink" />
+                              <FontAwesomeIcon icon={fas.faUser} inverse size="2x" transform="shrink-2 right-1 down-2" />
+                            </span>
+                        </figure>
+                    </div>
+                    <div className="tabs">
+                        <ul>
+                            <li className="is-active"><a>Work</a></li>
+                            <li><a>Personal</a></li>
+                            <li><a>Housework</a></li>
+                        </ul>
+                    </div>
                     <div className='container'>
                         <h3 className='title'>What are we doing today?</h3>
                         <hr/>
