@@ -32,7 +32,7 @@ Currently the app serves up one global todo list. If we wanted multiple users, t
 ## 3. Offline Usage and State Resolution
 A better solution to offline usage would be to timestamp user actions and reduce them to their net effects. For example:
 
-```
+```js
 [
   todo_1 completed @ 12:00,
   todo_1 uncompleted @ 12:30,
@@ -48,7 +48,7 @@ To add parent/child todos, I would include represent todos more like a graph wit
 #### Server-side
 On the server, the todos could be stored as a map of id to the todo.
 
-```
+```js
 {
   0: {id: 0, title: 'Feed the cat', parent: null, children: [2]},
   1: {id: 1, title: 'Get coffee', parent: null, children: null},
@@ -73,7 +73,7 @@ Completion remains unchanged. However, the server could check if the todo has ch
 #### Client-side
 When the data is sent to client side, the todos should be reshaped to a proper graph structure. To do this, we check each todo that has a `parent == null`, these are our top-level todos. Then for each top-level node, we can recursively add each child in the children field.
 
-```
+```js
 {
   0: {id: 0, title: 'Feed the cat', parent: null, children:{
     2: {id: 2, title: 'Clean dish', parent: 0, children: null}
