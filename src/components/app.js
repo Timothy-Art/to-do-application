@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
 import TodoList from './todo-list';
-import DBContext from '../contexts/db-context'
+import DBContext from '../contexts/db-context';
 import { server, add, complete, completeAll, remove, removeAll } from '../client';
-import {get_db_cache, push_db_cache, process_db_updates, push_db_update} from '../cache'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import * as far from '@fortawesome/free-regular-svg-icons';
-import * as fas from '@fortawesome/free-solid-svg-icons';
+import {get_db_cache, push_db_cache, process_db_updates, push_db_update} from '../cache';
 import 'bulma/css/bulma.min.css';
 
 class App extends Component {
@@ -47,22 +44,27 @@ class App extends Component {
 
         // Adds a new entry, caches it if the server is unavailable.
         this.make = todo => {
-            if (server.connected){
-                add(todo);
-            } else {
-                this.update({title: todo, completed: false});
-                push_db_update('make', todo);
+            todo = todo.trim();
+            if (todo !== ''){
+                if (server.connected){
+                    add(todo);
+                } else {
+                    this.update({title: todo, completed: false});
+                    push_db_update('make', todo);
+                }
             }
         };
 
         // Toggles complete on an entry, caches it if the server is unavailable.
         this.complete = title => {
             if (server.connected){
-                complete(title)
+                complete({title: title, completed: !this.state.db[title].completed});
             } else {
                 if (title in this.state.db){
-                    this.update({title: this.state.db[title].title, completed: !this.state.db[title].completed});
-                    push_db_update('complete', title);
+                    let todo = {title: this.state.db[title].title, completed: !this.state.db[title].completed};
+                    this.update(todo);
+                    console.log(todo);
+                    push_db_update('complete', todo);
                 }
             }
         };
@@ -137,23 +139,6 @@ class App extends Component {
         return (
             <DBContext.Provider value={this.state}>
                 <section className='App section'>
-                    <div className="media">
-                        <div className="media-content">
-                        </div>
-                        <figure className="media-right">
-                            <span className="fa-layers fa-fw">
-                              <FontAwesomeIcon icon={fas.faCircle} size="2x" color="deeppink" />
-                              <FontAwesomeIcon icon={fas.faUser} inverse size="2x" transform="shrink-2 right-1 down-2" />
-                            </span>
-                        </figure>
-                    </div>
-                    <div className="tabs">
-                        <ul>
-                            <li className="is-active"><a>Work</a></li>
-                            <li><a>Personal</a></li>
-                            <li><a>Housework</a></li>
-                        </ul>
-                    </div>
                     <div className='container'>
                         <h3 className='title'>What are we doing today?</h3>
                         <hr/>

@@ -38,6 +38,7 @@ export const process_db_updates = () => {
     window.localStorage.setItem('db_updates', JSON.stringify([]));
 
     for (let update of updates){
+        console.log(update);
         switch (update.action){
             case 'make':
                 add(update.obj);
@@ -53,6 +54,8 @@ export const process_db_updates = () => {
                 break;
             case 'removeAll':
                 removeAll();
+                break;
+            default:
                 break;
         }
     }

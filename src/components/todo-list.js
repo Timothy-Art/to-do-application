@@ -27,11 +27,22 @@ class MakeInput extends Component{
         super(props);
         this.state = {value: ''};
 
+        // References to the inputs in the component. Set in the render method.
+        this.textInput = null;
+        this.submitInput = null;
+
         this.handleChange = this.handleChange.bind(this);
+        this.handleEnter = this.handleEnter.bind(this);
     }
 
     handleChange(event) {
         this.setState({value: event.target.value});
+    }
+
+    handleEnter(event){
+        if (event.key === 'Enter'){
+            this.submitInput.click();
+        }
     }
 
     render(){
@@ -46,6 +57,7 @@ class MakeInput extends Component{
                         placeholder="Feed the cat"
                         value={this.state.value}
                         onChange={this.handleChange}
+                        onKeyDown={this.handleEnter}
                         // Set to this.textInput so we can refer to it programmatically.
                         ref={input => this.textInput = input}
                         autoFocus
@@ -53,11 +65,16 @@ class MakeInput extends Component{
                     </div>
                     <div className='columns is-multiline is-mobile'>
                         <div className='column is-narrow'>
-                            <button className='button is-info' onClick={() => {
-                                make(this.state.value);
-                                this.setState({value: ''});
-                                this.textInput.focus()
-                            }}>
+                            <button
+                                className='button is-info'
+                                onClick={() => {
+                                    make(this.state.value);
+                                    this.setState({value: ''});
+                                    this.textInput.focus();
+                                }}
+                                // Set to this.submitInput so we can refer to it.
+                                ref={input => this.submitInput = input}
+                            >
                                 <span className='icon is-small'>
                                     <FontAwesomeIcon icon={fas.faPlusCircle} />
                                 </span>

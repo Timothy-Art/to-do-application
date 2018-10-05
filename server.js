@@ -39,14 +39,14 @@ server.on('connection', (client) => {
     });
 
     // Accepts when a client completes a todo and toggles the completed property. Emits an update event.
-    client.on('complete', (title) => {
+    client.on('complete', (todo) => {
         // Toggle our completed field when the message is sent.
-        if (title in DB){
-            DB[title].completed = !DB[title].completed;
+        if (todo.title in DB){
+            DB[todo.title].completed = todo.completed;
         }
 
         // Send an update with the completed todo item.
-        updateTodo(title);
+        updateTodo(todo.title);
     });
 
     // Accepts when a client completes all todos. Emits a load event.
